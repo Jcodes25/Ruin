@@ -27,7 +27,7 @@ class SpriteObject:
 
         self.sprite_half_width = proj_width // 2
         height_shift = proj_height * self.SPRITE_HEIGHT_SHIFT
-        pos = self.screen_x - self.sprite_half_width, HALF_HEIGHT - proj // 2 + height_shift
+        pos = self.screen_x - self.sprite_half_width, HALF_HEIGHT - proj_height // 2 + height_shift
 
         self.game.raycasting.objects_to_render.append((self.norm_dist, image, pos))
 
@@ -55,7 +55,7 @@ class SpriteObject:
 
 class AnimatedSprite(SpriteObject):
     def __init__(self, game, path='resources/sprites/animated_sprites/green_light/0.png',
-                 pos=(11.5, 3.5), scale=0.8, shift=0.15, animation_time=120):
+                 pos=(11.5, 3.5), scale=0.8, shift=0.16, animation_time=120):
         super().__init__(game, path, pos, scale, shift)
         self.animation_time = animation_time
         self.path = path.rsplit('/', 1)[0]
@@ -81,14 +81,21 @@ class AnimatedSprite(SpriteObject):
             self.animation_trigger = True
 
     def get_images(self, path):
+        file_list = os.listdir(path)
+        sorted_files = sorted(file_list)
+
         images = deque()
-        for file_name in os.listdir(path):
+        for file_name in sorted_files:
             if os.path.isfile(os.path.join(path, file_name)):
                 img = pg.image.load(path + '/' + file_name).convert_alpha()
                 images.append(img)
         return images
 
-
+# I managed to fix this in the get_images()
+# function by putting os.listdir(path) into-
+# a variable, sorting the variable and then
+# iterating through the sorted variable instead
+# of os.listdir(path).
 
 
 

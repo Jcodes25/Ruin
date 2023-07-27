@@ -8,6 +8,14 @@ class Player:
         self.game = game
         self.x, self.y = PLAYER_POS
         self.angle = PLAYER_ANGLE
+        self.shot = False
+
+    def single_fire_event(self, event):
+        if event.type == pg.MOUSEBUTTONDOWN:
+            if event.button == 1 and not self.shot and not self.game.weapon.reloading:
+                self.game.sound.shotgun.play()
+                self.shot = True
+                self.game.weapon.reloading = True
 
     def movement(self):
         sin_a = math.sin(self.angle)
@@ -50,9 +58,9 @@ class Player:
             self.y += dy
 
     def draw(self):
-        # pg.draw.line(self.game.screen, 'yellow', (self.x * 100, self.y * 100),
-        #              (self.x * 100 + WIDTH * math.cos(self.angle),
-        #               self.y * 100 + WIDTH * math.sin(self.angle)), 2)
+        pg.draw.line(self.game.screen, 'yellow', (self.x * 100, self.y * 100),
+                     (self.x * 100 + WIDTH * math.cos(self.angle),
+                      self.y * 100 + WIDTH * math.sin(self.angle)), 2)
         pg.draw.circle(self.game.screen, 'green', (self.x * 100, self.y * 100), 15)
 
     def mouse_control(self):
